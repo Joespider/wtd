@@ -1,7 +1,7 @@
 import sys
 
 TheProgram = "wtd"
-VersionName = "0.0.5"
+VersionName = "0.0.6"
 
 GetAllTags = []
 
@@ -169,32 +169,46 @@ def Help(BashOrPS="", Tag=""):
 		print("Author: joespider")
 		print("Program: \""+TheProgram+"\"")
 		print("Version: "+VersionName)
-		print("Purpose: ")
+		print("Purpose: Createing commands that can be run on Bash and PowerShell")
 		print("Usage: "+TheProgram+" <args>")
-		print("\t--bash <cmd> <args>")
-		print("\t--ps <cmd> <args>")
+		print("\t--bash <tag> <args>")
+		print("\t--ps <tag> <args>")
+		print("")
+		print("Get the list of command tags")
+		print("\t"+TheProgram+" --bash <tag> --help")
+		print("\t"+TheProgram+" --ps <tag> --help")
+		print("")
+		print("Get the arguments for a given tag")
+		print("\t"+TheProgram+" --bash <tag> --help")
+		print("\t"+TheProgram+" --ps <tag> --help")
+		print("")
+		print("Get the fields to input for a given tag")
+		print("\t"+TheProgram+" --bash <tag> --fields")
+		print("\t"+TheProgram+" --ps <tag> --fields")
 		print("")
 		print("example:")
-		print(TheProgram+" --bash file.list")
+		print("\t"+TheProgram+" --bash file.list")
+		print("\tls")
+		print("\t"+TheProgram+" --bash file.list --fields")
 		print("\tls <args> <file>")
-		print(TheProgram+" --bash file.list args=info file=name.txt")
+		print("\t"+TheProgram+" --bash file.list args=info file=name.txt")
 		print("\tls -l name.txt")
 		print("")
-		print(TheProgram+" --bash file.copy")
+		print("\t"+TheProgram+" --bash file.copy --fields")
 		print("\tcp <args> <old> <new>")
-		print(TheProgram+" --bash file.copy old=me.txt,new=you/")
+		print("\t"+TheProgram+" --bash file.copy old=me.txt,new=you/")
 		print("\tcp me.txt you/")
 		print("")
-		print(TheProgram+" --bash file.list")
+		print("\t"+TheProgram+" --bash file.list --fields")
 		print("\tGet-ChildItem <args> <file>")
-		print(TheProgram+" --ps file.list args=info file=name.txt")
+		print("\t"+TheProgram+" --ps file.list args=info file=name.txt")
 		print("\tGet-ChildItem -Name name.txt")
-		print(TheProgram+" --ps file.list args=all,info file=name.txt")
+		print("\t"+TheProgram+" --ps file.list args=all,info file=name.txt")
 		print("\tGet-ChildItem -Name -Hidden name.txt")
 		print("")
-		print(TheProgram+" --ps file.copy")
+		print("\t"+TheProgram+" --ps file.copy --fields")
 		print("\tCopy-Item <args> <old> <new>")
-		print(TheProgram+" --ps file.copy old=me.txt,new=you/")
+		print("\t"+TheProgram+" --ps file.copy old=me.txt,new=you/")
 		print("\tCopy-Item me.txt you/")
 	elif BashOrPS != "" and Tag == "":
 		for Tag in GetAllTags:
@@ -357,7 +371,9 @@ def Main():
 				for Element in OtherArgs:
 					if Element.startswith("<") and Element.endswith(">"):
 						Element = ""
-					newProgram.append(Element)
+					if Element != "":
+						newProgram.append(Element)
+
 				Program = " ".join(newProgram)
 				Program = Program.strip()
 				print(Program)
@@ -365,6 +381,8 @@ def Main():
 				TheCommandArgs = UserIn[2]
 				if TheCommandArgs == "--help":
 					Help(BashOrPs,TheCommand)
+				elif TheCommandArgs == "--fields":
+					print(Program)
 				elif "args=" not in TheCommandArgs:
 					ProgArgs = "args=default"
 					ProgArgs = HandleArgs(BashOrPs,TheCommand,ProgArgs)
